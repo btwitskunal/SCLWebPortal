@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTL Marketing Execution Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <img src="img/logo.png" alt="Shree Cement Logo" class="logo">
+        </div>
+        <h1 class="portal-title">BTL Marketing Execution Portal</h1>
+        <a href="/template/download" class="download-btn">⬇ Download Template</a>
+    </header>
+
+    <!-- Scrollable Content Wrapper -->
+    <div class="content-wrapper">
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Background -->
+            <div class="background"></div>
+
+            <!-- Login Section -->
+            <section id="login-section">
+                <div class="login-box">
+                    <h2>Welcome back</h2>
+                    <p class="subtitle">Sign in to your account to continue</p>
+                    <button id="login-btn" class="azure-btn">
+                        <img src="img/microsoft-logo.png" alt="Microsoft Logo" class="ms-icon" style="width:24px;height:24px;vertical-align:middle;margin-right:8px;">
+                        Sign in with Microsoft
+                    </button>
+                </div>
+            </section>
+
+            <!-- Upload Modal (hidden by default) -->
+            <div id="upload-modal" style="display: none">
+                <div class="modal-content">
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                    <h2>Upload Files</h2>
+                    <div class="upload-area" id="drop-area">
+                        <img src="img/upload-icon.svg" alt="Upload Icon" class="upload-icon">
+                        <p><strong>Drag and drop files here</strong></p>
+                        <p class="upload-info">Supported formats: xlsx, xls<br>Maximum file size: 25MB</p>
+                        <input type="file" id="fileElem" accept=".xlsx,.xls" style="display:none">
+                    </div>
+                    <div class="upload-options">
+                        <button class="option active" onclick="document.getElementById('fileElem').click()">My Computer</button>
+                        <button class="option" disabled>Google Drive</button>
+                        <button class="option" disabled>One Drive</button>
+                    </div>
+                    <div class="upload-actions">
+                        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+                        <button class="done-btn" id="uploadBtn">Done</button>
+                    </div>
+                    <div id="upload-result"></div>
+                </div>
+            </div>
+
+            <!-- Analysis Section (hidden by default) -->
+            <section id="analysis-section" style="display: none"></section>
+        </main>
+
+        <!-- Navigation (hidden by default) -->
+        <nav id="user-nav" style="display: none">
+            <div class="nav-group">
+                <button class="nav-btn" id="nav-upload">Upload</button>
+                <button class="nav-btn" id="nav-analysis">Analysis</button>
+            </div>
+            <button class="nav-btn logout-btn" id="nav-logout">Logout</button>
+        </nav>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Secure enterprise data management</p>
+        <p>© 2025 Shree Cement Data Portal. All rights reserved.</p>
+    </footer>
+
+    <script src="js/layout-control.js"></script>
+    <script src="js/upload-modal.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/analysis.js"></script>
+    <script src="js/chart.js"></script>
+</body>
+</html>
