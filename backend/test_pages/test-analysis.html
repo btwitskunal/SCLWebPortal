@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Analysis</title>
+</head>
+<body>
+  <h2>Test /analysis Endpoint</h2>
+  <button onclick="fetchAnalysis()">Get Analysis</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function fetchAnalysis() {
+      const res = await fetch('http://localhost:4000/analysis');
+      const data = await res.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
