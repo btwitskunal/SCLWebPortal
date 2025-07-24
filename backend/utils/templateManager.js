@@ -39,24 +39,46 @@ async function syncDataTableSchema() {
   const columns = await getTemplateDefinition();
   // Get current columns in uploaded_data
   const [currentColsRows] = await pool.query(`SHOW COLUMNS FROM ${DATA_TABLE}`);
-  const currentCols = currentColsRows.map(col => col.Field);
+  const currentCols = currentColsRows.map(col => ({
+    name: col.Field,
+    type: col.Type.toUpperCase()
+  }));
 
-  // Determine columns to add
+  // Helper to map template types to MySQL types
+  function mapType(templateType) {
+    if (templateType === 'INT') return 'INT';
+    if (templateType === 'DATE') return 'DATE';
+    if (templateType === 'FLOAT' || templateType === 'DOUBLE') return 'DOUBLE';
+    return 'VARCHAR(255)';
+  }
+
+  // Add new columns and update types if changed
   for (const col of columns) {
-    if (!currentCols.includes(col.name)) {
-      let type = 'VARCHAR(255)';
-      if (col.type === 'INT') type = 'INT';
-      else if (col.type === 'DATE') type = 'DATE';
-      else if (col.type === 'FLOAT' || col.type === 'DOUBLE') type = 'DOUBLE';
+    const existingCol = currentCols.find(c => c.name === col.name);
+    const desiredType = mapType(col.type);
+    if (!existingCol) {
       // Add column
-      await pool.query(`ALTER TABLE ${DATA_TABLE} ADD COLUMN \`${col.name}\` ${type} NULL`);
+      await pool.query(`ALTER TABLE ${DATA_TABLE} ADD COLUMN \`${col.name}\` ${desiredType} NULL`);
+    } else {
+      // Update column type if different
+      // MySQL type string may include length, so we check with includes
+      if (!existingCol.type.includes(desiredType)) {
+        await pool.query(`ALTER TABLE ${DATA_TABLE} MODIFY COLUMN \`${col.name}\` ${desiredType} NULL`);
+      }
+    }
+  }
+
+  // Remove columns not present in template
+  for (const dbCol of currentCols) {
+    if (!columns.find(col => col.name === dbCol.name)) {
+      await pool.query(`ALTER TABLE ${DATA_TABLE} DROP COLUMN \`${dbCol.name}\``);
     }
   }
 }
 
 module.exports = {
   getTemplateDefinition,
-  setTemplateDefinition,
+    setTemplateDefinition,
   generateTemplateFile,
   syncDataTableSchema
 };

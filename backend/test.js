@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -22,6 +23,17 @@ syncDataTableSchema().then(() => {
 }).catch(err => {
   console.error('Failed to synchronize database schema:', err);
   process.exit(1);
+});
+
+// Watch template.xlsx for changes and sync schema dynamically
+const TEMPLATE_FILE_PATH = path.join(__dirname, 'template.xlsx');
+fs.watchFile(TEMPLATE_FILE_PATH, { interval: 1000 }, (curr, prev) => {
+  if (curr.mtime !== prev.mtime) {
+    console.log('template.xlsx changed, syncing database schema...');
+    syncDataTableSchema()
+      .then(() => console.log('Database schema synchronized with updated template.xlsx'))
+      .catch(err => console.error('Failed to synchronize database schema:', err));
+  }
 });
 
 app.use(cors({ origin: true, credentials: true }));
