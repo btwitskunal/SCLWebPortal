@@ -42,8 +42,7 @@ app.use('/auth', authRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/template', templateRoutes);
 app.use('/analysis', analysisRoutes);
-app.use('/roles', require('./routes/roles'));
-app.use('/users', require('./routes/users'));
+app.use('/data', require('./routes/data'));
 
 app.get('/', (req, res) => {
   res.send('Backend API is running.');

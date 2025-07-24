@@ -196,11 +196,11 @@ const requireAnyPermission = (permissions) => {
   };
 };
 
-// Admin only middleware
-const requireAdmin = requireAnyPermission(['user.manage_roles', 'system.configure']);
+// DO role middleware (for upload operations)
+const requireDO = requireRole('do');
 
-// Super admin only middleware  
-const requireSuperAdmin = requireRole('super_admin');
+// Any authenticated user (both DO and Sales Executive)
+const requireAnyRole = requireAnyPermission(['data.read', 'data.upload']);
 
 // Middleware to attach user permissions to request
 const attachUserPermissions = async (req, res, next) => {
@@ -223,7 +223,7 @@ module.exports = {
   requireRole,
   requireAllPermissions,
   requireAnyPermission,
-  requireAdmin,
-  requireSuperAdmin,
+  requireDO,
+  requireAnyRole,
   attachUserPermissions
 };

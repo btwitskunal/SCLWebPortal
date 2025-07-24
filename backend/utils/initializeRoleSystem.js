@@ -85,12 +85,8 @@ async function initializeRoleSystem() {
 
 async function insertDefaultRoles() {
   const defaultRoles = [
-    { name: 'super_admin', description: 'Super Administrator with full system access' },
-    { name: 'admin', description: 'Administrator with management capabilities' },
-    { name: 'manager', description: 'Manager with data analysis and team oversight' },
-    { name: 'analyst', description: 'Data analyst with read and analysis permissions' },
-    { name: 'user', description: 'Basic user with limited upload and view permissions' },
-    { name: 'viewer', description: 'Read-only access to data' }
+    { name: 'do', description: 'District Officer - Can upload, download and analyze data with filters' },
+    { name: 'sales_executive', description: 'Sales Executive/Admin - Can download and analyze data only' }
   ];
 
   for (const role of defaultRoles) {
@@ -103,26 +99,11 @@ async function insertDefaultRoles() {
 
 async function insertDefaultPermissions() {
   const defaultPermissions = [
-    // User Management
-    { name: 'user.create', description: 'Create new users', resource: 'user', action: 'create' },
-    { name: 'user.read', description: 'View user information', resource: 'user', action: 'read' },
-    { name: 'user.update', description: 'Update user information', resource: 'user', action: 'update' },
-    { name: 'user.delete', description: 'Delete users', resource: 'user', action: 'delete' },
-    { name: 'user.manage_roles', description: 'Assign roles to users', resource: 'user', action: 'manage_roles' },
-
-    // Role Management
-    { name: 'role.create', description: 'Create new roles', resource: 'role', action: 'create' },
-    { name: 'role.read', description: 'View roles', resource: 'role', action: 'read' },
-    { name: 'role.update', description: 'Update roles', resource: 'role', action: 'update' },
-    { name: 'role.delete', description: 'Delete roles', resource: 'role', action: 'delete' },
-    { name: 'role.manage_permissions', description: 'Assign permissions to roles', resource: 'role', action: 'manage_permissions' },
-
     // Data Management
     { name: 'data.upload', description: 'Upload data files', resource: 'data', action: 'upload' },
     { name: 'data.read', description: 'View uploaded data', resource: 'data', action: 'read' },
-    { name: 'data.update', description: 'Update data records', resource: 'data', action: 'update' },
-    { name: 'data.delete', description: 'Delete data records', resource: 'data', action: 'delete' },
-    { name: 'data.export', description: 'Export data', resource: 'data', action: 'export' },
+    { name: 'data.download', description: 'Download data files', resource: 'data', action: 'download' },
+    { name: 'data.filter', description: 'Apply filters to data', resource: 'data', action: 'filter' },
 
     // Analysis
     { name: 'analysis.basic', description: 'Perform basic data analysis', resource: 'analysis', action: 'basic' },
@@ -131,13 +112,7 @@ async function insertDefaultPermissions() {
 
     // Template Management
     { name: 'template.read', description: 'View templates', resource: 'template', action: 'read' },
-    { name: 'template.update', description: 'Update templates', resource: 'template', action: 'update' },
-    { name: 'template.download', description: 'Download templates', resource: 'template', action: 'download' },
-
-    // System Administration
-    { name: 'system.configure', description: 'Configure system settings', resource: 'system', action: 'configure' },
-    { name: 'system.logs', description: 'View system logs', resource: 'system', action: 'logs' },
-    { name: 'system.backup', description: 'Perform system backups', resource: 'system', action: 'backup' }
+    { name: 'template.download', description: 'Download templates', resource: 'template', action: 'download' }
   ];
 
   for (const permission of defaultPermissions) {
@@ -151,42 +126,28 @@ async function insertDefaultPermissions() {
 async function assignDefaultRolePermissions() {
   // Define role-permission mappings
   const rolePermissions = {
-    'super_admin': [
-      // All permissions
-      'user.create', 'user.read', 'user.update', 'user.delete', 'user.manage_roles',
-      'role.create', 'role.read', 'role.update', 'role.delete', 'role.manage_permissions',
-      'data.upload', 'data.read', 'data.update', 'data.delete', 'data.export',
-      'analysis.basic', 'analysis.advanced', 'analysis.reports',
-      'template.read', 'template.update', 'template.download',
-      'system.configure', 'system.logs', 'system.backup'
-    ],
-    'admin': [
-      'user.create', 'user.read', 'user.update', 'user.manage_roles',
-      'role.read',
-      'data.upload', 'data.read', 'data.update', 'data.delete', 'data.export',
-      'analysis.basic', 'analysis.advanced', 'analysis.reports',
-      'template.read', 'template.update', 'template.download'
-    ],
-    'manager': [
-      'user.read',
-      'data.upload', 'data.read', 'data.export',
-      'analysis.basic', 'analysis.advanced', 'analysis.reports',
-      'template.read', 'template.download'
-    ],
-    'analyst': [
-      'data.read', 'data.export',
-      'analysis.basic', 'analysis.advanced', 'analysis.reports',
-      'template.read', 'template.download'
-    ],
-    'user': [
-      'data.upload', 'data.read',
+    'do': [
+      // DO can upload, download, view data with filters and perform analysis
+      'data.upload',
+      'data.read', 
+      'data.download',
+      'data.filter',
       'analysis.basic',
-      'template.read', 'template.download'
+      'analysis.advanced', 
+      'analysis.reports',
+      'template.read',
+      'template.download'
     ],
-    'viewer': [
+    'sales_executive': [
+      // Sales Executive can only download, view data and perform analysis (no upload)
       'data.read',
+      'data.download',
+      'data.filter',
       'analysis.basic',
-      'template.read'
+      'analysis.advanced',
+      'analysis.reports', 
+      'template.read',
+      'template.download'
     ]
   };
 

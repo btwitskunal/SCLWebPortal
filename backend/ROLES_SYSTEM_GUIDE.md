@@ -17,16 +17,12 @@ Your portal now includes a comprehensive role-based access control (RBAC) system
 - **Auth Middleware** - Enforces authentication and authorization
 - **Role/User Controllers** - Manage roles and users via API
 
-## 🎭 Default Roles
+## 🎭 Roles
 
-| Role | Description | Typical Use Case |
-|------|-------------|------------------|
-| **super_admin** | Full system access | System administrators |
-| **admin** | Management capabilities | Department heads, IT managers |
-| **manager** | Data analysis and team oversight | Team leads, supervisors |
-| **analyst** | Data analysis permissions | Data scientists, researchers |
-| **user** | Basic upload and view permissions | Regular employees |
-| **viewer** | Read-only access | Stakeholders, executives |
+| Role | Description | Capabilities |
+|------|-------------|--------------|
+| **DO** | District Officer | Upload files, download filtered data, analyze data, generate reports |
+| **Sales Executive** | Sales Executive/Admin | Download filtered data, analyze data, generate reports (no upload) |
 
 ## 🔑 Permission System
 
@@ -34,26 +30,11 @@ Your portal now includes a comprehensive role-based access control (RBAC) system
 
 ### Resources & Actions
 
-#### User Management (`user.*`)
-- `user.create` - Create new users
-- `user.read` - View user information
-- `user.update` - Update user information
-- `user.delete` - Delete users
-- `user.manage_roles` - Assign roles to users
-
-#### Role Management (`role.*`)
-- `role.create` - Create new roles
-- `role.read` - View roles
-- `role.update` - Update roles
-- `role.delete` - Delete roles
-- `role.manage_permissions` - Assign permissions to roles
-
 #### Data Management (`data.*`)
-- `data.upload` - Upload data files
+- `data.upload` - Upload data files (DO only)
 - `data.read` - View uploaded data
-- `data.update` - Update data records
-- `data.delete` - Delete data records
-- `data.export` - Export data
+- `data.download` - Download filtered data
+- `data.filter` - Apply filters to data
 
 #### Analysis (`analysis.*`)
 - `analysis.basic` - Basic data analysis
@@ -62,13 +43,7 @@ Your portal now includes a comprehensive role-based access control (RBAC) system
 
 #### Template Management (`template.*`)
 - `template.read` - View templates
-- `template.update` - Update templates
 - `template.download` - Download templates
-
-#### System Administration (`system.*`)
-- `system.configure` - Configure system settings
-- `system.logs` - View system logs
-- `system.backup` - Perform system backups
 
 ## 🚀 Setup Instructions
 
@@ -78,16 +53,18 @@ cd backend
 npm run setup-roles
 ```
 
-### 2. Create Your First Super Admin
+### 2. Assign DO Role (Optional)
 Add to your `.env` file:
 ```env
-SUPER_ADMIN_EMAIL=your-email@domain.com
+DO_EMAIL=do-user@domain.com
 ```
 
 Then run setup again:
 ```bash
 npm run setup-roles
 ```
+
+Note: New users default to Sales Executive role. You can manually assign DO role later.
 
 ### 3. Start the Application
 ```bash
@@ -99,29 +76,19 @@ npm start
 ### Authentication
 - `GET /auth/profile` - Get current user profile with permissions
 
-### User Management
-- `GET /users` - List all users (requires `user.read`)
-- `GET /users/me` - Get current user profile
-- `GET /users/stats` - Get user statistics (requires `user.read`)
-- `GET /users/:id` - Get user by ID (requires `user.read`)
-- `PUT /users/:id/role` - Update user role (requires `user.manage_roles`)
-- `PUT /users/:id/status` - Activate/deactivate user (requires `user.update`)
-- `POST /users/bulk/roles` - Bulk update user roles (requires `user.manage_roles`)
+### Data Operations
+- `GET /data/summary` - Get data summary for filtering UI (both roles)
+- `POST /data/count` - Get filtered data count preview (both roles)
+- `POST /data/download` - Download filtered data as Excel/JSON (both roles)
 
-### Role Management
-- `GET /roles` - List all roles (requires `role.read`)
-- `GET /roles/:id` - Get role by ID (requires `role.read`)
-- `POST /roles` - Create new role (requires `role.create`)
-- `PUT /roles/:id` - Update role (requires `role.update`)
-- `DELETE /roles/:id` - Delete role (requires `role.delete`)
-- `GET /roles/permissions/all` - Get all permissions (requires `role.read`)
+### File Operations
+- `POST /upload` - Upload data files (DO only)
+- `GET /template` - Get template structure (both roles)
+- `GET /template/download` - Download template file (both roles)
 
-### Protected Existing Endpoints
-- `POST /upload` - Now requires `data.upload` permission
-- `GET /analysis/data` - Now requires `data.read` permission
-- `POST /analysis/summary` - Now requires `analysis.basic` or `analysis.advanced`
-- `GET /template` - Now requires `template.read` permission
-- `GET /template/download` - Now requires `template.download` permission
+### Analysis
+- `GET /analysis/data` - View uploaded data (both roles)
+- `POST /analysis/summary` - Perform data analysis (both roles)
 
 ## 🛡️ Using Middleware
 
