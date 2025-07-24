@@ -22,7 +22,7 @@ Your portal now includes a comprehensive role-based access control (RBAC) system
 | Role | Description | Capabilities |
 |------|-------------|--------------|
 | **DO** | District Officer | Upload files, download filtered data, analyze data, generate reports |
-| **Sales Executive** | Sales Executive/Admin | Download filtered data, analyze data, generate reports (no upload) |
+| **Admin** | Admin/Sales Executive | Download filtered data, analyze data, generate reports (no upload) |
 
 ## 🔑 Permission System
 
@@ -64,7 +64,7 @@ Then run setup again:
 npm run setup-roles
 ```
 
-Note: New users default to Sales Executive role. You can manually assign DO role later.
+Note: New users default to Admin role. You can manually assign DO role later.
 
 ### 3. Start the Application
 ```bash

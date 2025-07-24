@@ -184,12 +184,12 @@ class UserService {
     }
   }
 
-  // Get default role (sales_executive as default)
+  // Get default role (admin as default)
   static async getDefaultRole() {
     try {
       const [roles] = await pool.query(
         'SELECT * FROM roles WHERE name = ? AND is_active = TRUE',
-        ['sales_executive']
+        ['admin']
       );
       
       if (roles.length > 0) {

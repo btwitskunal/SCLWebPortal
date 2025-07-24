@@ -86,7 +86,7 @@ async function initializeRoleSystem() {
 async function insertDefaultRoles() {
   const defaultRoles = [
     { name: 'do', description: 'District Officer - Can upload, download and analyze data with filters' },
-    { name: 'sales_executive', description: 'Sales Executive/Admin - Can download and analyze data only' }
+    { name: 'admin', description: 'Admin/Sales Executive - Can download and analyze data only' }
   ];
 
   for (const role of defaultRoles) {
@@ -138,8 +138,8 @@ async function assignDefaultRolePermissions() {
       'template.read',
       'template.download'
     ],
-    'sales_executive': [
-      // Sales Executive can only download, view data and perform analysis (no upload)
+    'admin': [
+      // Admin/Sales Executive can only download, view data and perform analysis (no upload)
       'data.read',
       'data.download',
       'data.filter',

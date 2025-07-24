@@ -27,9 +27,9 @@ UPDATE users
 SET role_id = (SELECT id FROM roles WHERE name = 'do') 
 WHERE email = 'user@example.com';
 
--- Assign Sales Executive role to a user
+-- Assign Admin role to a user
 UPDATE users 
-SET role_id = (SELECT id FROM roles WHERE name = 'sales_executive') 
+SET role_id = (SELECT id FROM roles WHERE name = 'admin') 
 WHERE email = 'user@example.com';
 
 -- Check specific user's permissions

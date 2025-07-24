@@ -199,7 +199,7 @@ const requireAnyPermission = (permissions) => {
 // DO role middleware (for upload operations)
 const requireDO = requireRole('do');
 
-// Any authenticated user (both DO and Sales Executive)
+// Any authenticated user (both DO and Admin)
 const requireAnyRole = requireAnyPermission(['data.read', 'data.upload']);
 
 // Middleware to attach user permissions to request

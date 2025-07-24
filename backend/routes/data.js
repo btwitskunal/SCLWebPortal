@@ -6,13 +6,13 @@ const { requireAuth, requirePermission } = require('../middleware/auth');
 // Apply authentication to all data routes
 router.use(requireAuth);
 
-// Get data summary for filtering UI (both DO and Sales Executive can access)
+// Get data summary for filtering UI (both DO and Admin can access)
 router.get('/summary', requirePermission('data.read'), DataController.getDataSummary);
 
-// Get filtered data count for preview (both DO and Sales Executive can access)
+// Get filtered data count for preview (both DO and Admin can access)
 router.post('/count', requirePermission('data.filter'), DataController.getFilteredCount);
 
-// Download filtered data (both DO and Sales Executive can access)
+// Download filtered data (both DO and Admin can access)
 router.post('/download', requirePermission('data.download'), DataController.downloadData);
 
 module.exports = router;

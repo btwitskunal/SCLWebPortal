@@ -38,7 +38,7 @@ async function setupRoleSystem() {
     console.log('\n🎉 Role system setup complete!');
     console.log('\n📋 Roles Created:');
     console.log('   • DO (District Officer) - Upload, download, filter and analyze data');
-    console.log('   • Sales Executive - Download, filter and analyze data only');
+    console.log('   • Admin/Sales Executive - Download, filter and analyze data only');
 
     console.log('\n🔐 Permissions Created:');
     console.log('   • Data Management (data.upload, data.read, data.download, data.filter)');
@@ -52,7 +52,7 @@ async function setupRoleSystem() {
     console.log('     ✅ View and analyze all data');
     console.log('     ✅ Generate reports');
     console.log('   ');
-    console.log('   Sales Executive:');
+    console.log('   Admin/Sales Executive:');
     console.log('     ❌ Upload files');
     console.log('     ✅ Download filtered data');
     console.log('     ✅ View and analyze all data');
