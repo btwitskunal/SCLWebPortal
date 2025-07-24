@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const router = express.Router();
 const uploadController = require('../controllers/uploadController');
+const { requireAuth, requirePermission } = require('../middleware/auth');
 
 // Multer storage config
 const storage = multer.diskStorage({
@@ -26,7 +27,7 @@ function fileFilter(req, file, cb) {
 
 const upload = multer({ storage, fileFilter });
 
-// Upload endpoint
-router.post('/', upload.single('file'), uploadController.uploadFile);
+// Upload endpoint (requires authentication and data.upload permission)
+router.post('/', requireAuth, requirePermission('data.upload'), upload.single('file'), uploadController.uploadFile);
 
 module.exports = router; 

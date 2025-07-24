@@ -9,15 +9,20 @@ const uploadRoutes = require('./routes/upload');
 const templateRoutes = require('./routes/template');
 const analysisRoutes = require('./routes/analysis');
 const { syncDataTableSchema } = require('./utils/templateManager');
+const { initializeRoleSystem } = require('./utils/initializeRoleSystem');
 
 const app = express();
 
-// Sync database schema on startup
-syncDataTableSchema().then(() => {
+// Initialize database schema and role system on startup
+Promise.all([
+  syncDataTableSchema(),
+  initializeRoleSystem()
+]).then(() => {
   console.log('Database schema synchronized with template.xlsx');
+  console.log('Role system initialized successfully');
 }).catch(err => {
-  console.error('Failed to synchronize database schema:', err);
-  // Exit the process if schema sync fails, as it's a critical error
+  console.error('Failed to initialize database:', err);
+  // Exit the process if initialization fails, as it's a critical error
   process.exit(1);
 });
 
@@ -37,6 +42,8 @@ app.use('/auth', authRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/template', templateRoutes);
 app.use('/analysis', analysisRoutes);
+app.use('/roles', require('./routes/roles'));
+app.use('/users', require('./routes/users'));
 
 app.get('/', (req, res) => {
   res.send('Backend API is running.');

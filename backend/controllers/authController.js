@@ -1,6 +1,7 @@
 const passport = require('passport');
 const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 const azureAdConfig = require('../config/azureAd').creds;
+const UserService = require('../utils/userService');
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -10,12 +11,23 @@ passport.deserializeUser((user, done) => {
 });
 
 passport.use(new OIDCStrategy(azureAdConfig,
-  function(iss, sub, profile, accessToken, refreshToken, done) {
-    if (!profile.oid) {
-      return done(new Error('No OID found'), null);
+  async function(iss, sub, profile, accessToken, refreshToken, done) {
+    try {
+      if (!profile.oid) {
+        return done(new Error('No OID found'), null);
+      }
+      
+      // Find or create user in our database
+      const dbUser = await UserService.findOrCreateUser(profile);
+      
+      // Attach both Azure profile and our DB user info
+      profile.dbUser = dbUser;
+      
+      return done(null, profile);
+    } catch (error) {
+      console.error('Error in OIDC strategy:', error);
+      return done(error, null);
     }
-    // Here, you can look up or create the user in your DB
-    return done(null, profile);
   }
 ));
 
